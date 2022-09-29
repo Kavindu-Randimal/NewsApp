@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct APIResponse : Decodable {
-    let status : String?
+struct NewsAPIResponse : Decodable {
+    let status : String
     let totalResults : Int?
     let articles : [Article]?
     
