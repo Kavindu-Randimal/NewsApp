@@ -1,7 +1,7 @@
 # NewsApp
 Made by  - Kavindu Randimal Geeganage
 Graduate student in computer science honours digree. 
-This app is about the dailu news. 
+This app is about the daily news. 
 Use can see the top news of the day
 User can see the breaking news which are at the time
 user can filter news regardign the category
