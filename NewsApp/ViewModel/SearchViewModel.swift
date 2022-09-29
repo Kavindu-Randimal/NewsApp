@@ -11,21 +11,37 @@ import SwiftUI
 class SearchViewModel : ObservableObject {
     
     @Published var phase: DataFetchPhase<[Article]> = .empty
-    @Published var dateFetchPhase : DataFetchPhase<[Article]> = .empty
+//    @Published var dateFetchPhase : DataFetchPhase<[Article]> = .empty
     @Published var searchQuery = ""
-    private let newsApi = NewsAPI.shared
+    
+    private let newsAPI = NewsAPI.shared
+    
+    private var trimmedSearchQuery: String {
+        searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
     
     func searchArticle() async {
-        let searchQuery = self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        if Task.isCancelled { return }
+        
+        let searchQuery = trimmedSearchQuery
         phase = .empty
         
         if searchQuery.isEmpty {
             return
         }
+        
         do {
-            let articles = try await newsApi.search(for: searchQuery)
+            let articles = try await newsAPI.search(for: searchQuery)
+            if Task.isCancelled { return }
+            if searchQuery != trimmedSearchQuery {
+                return
+            }
             phase = .success(articles)
-        }catch {
+        } catch {
+            if Task.isCancelled { return }
+            if searchQuery != trimmedSearchQuery {
+                return
+            }
             phase = .failure(error)
         }
     }

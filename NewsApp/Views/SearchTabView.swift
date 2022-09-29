@@ -18,6 +18,11 @@ struct SearchTabView: View {
                 .navigationTitle("Search")
         }
         .searchable(text: $searchVM.searchQuery)
+        .onChange(of: searchVM.searchQuery) { newValue in
+            if newValue.isEmpty {
+                searchVM.phase = .empty
+            }
+        }
         .onSubmit(of: .search, search)
     }
     
@@ -51,7 +56,7 @@ struct SearchTabView: View {
     }
     
     private func search(){
-        async{
+        Task {
             await searchVM.searchArticle()
         }
     }

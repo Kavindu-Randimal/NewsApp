@@ -12,8 +12,8 @@ struct NewsViewRow: View {
     let article:Article
     
     var body: some View {
-        VStack(alignment: .leading,spacing: 16) {
-            AsyncImage(url: article.imageURL){ phase in
+        VStack(alignment: .leading, spacing: 16) {
+            AsyncImage(url: article.imageURL) { phase in
                 switch phase {
                 case .empty:
                     HStack {
@@ -22,26 +22,29 @@ struct NewsViewRow: View {
                         Spacer()
                     }
                     
-                case .success(let image) :
+                case .success(let image):
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     
-                case .failure :
-                    HStack{
+                case .failure:
+                    HStack {
                         Spacer()
                         Image(systemName: "photo")
-                            .imageScale(.medium)
+                            .imageScale(.large)
                         Spacer()
                     }
-                @unknown default : fatalError()
+                    
+                    
+                @unknown default:
+                    fatalError()
                 }
             }
             .frame(minHeight: 200, maxHeight: 300)
-            .background(Color.gray.opacity(0.2))
+            .background(Color.gray.opacity(0.3))
             .clipped()
             
-            VStack(alignment: .leading, spacing: 8){
+            VStack(alignment: .leading, spacing: 8) {
                 Text(article.title)
                     .font(.headline)
                     .lineLimit(3)
@@ -49,6 +52,7 @@ struct NewsViewRow: View {
                 Text(article.descriptionText)
                     .font(.subheadline)
                     .lineLimit(2)
+                
             }
             .padding([.horizontal, .bottom])
         }

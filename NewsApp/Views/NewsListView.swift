@@ -13,17 +13,20 @@ struct NewsListView: View {
     @State private var selectedArticle : Article?
     
     var body: some View {
-            List{
-                ForEach(articles) { article in
-                    NewsViewRow(article: article)
-                        .onTapGesture {
-                            selectedArticle = article
-                        }
-                }
+        List{
+            ForEach(articles) { article in
+                NewsViewRow(article: article)
+                    .onTapGesture {
+                        selectedArticle = article
+                    }
             }
-            .listStyle(.plain)
-            .sheet(item: $selectedArticle) {
-                webView(url: $0.articleURL)
+            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+        .sheet(item: $selectedArticle) {
+            webView(url: $0.articleURL)
+                .edgesIgnoringSafeArea(.bottom)
         }
     }
 }

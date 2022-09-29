@@ -7,9 +7,14 @@
 
 import Foundation
 
+
+fileprivate let relativeDateFormatter = RelativeDateTimeFormatter()
+
 struct Article {
-    let source: Source
     
+    let id = UUID()
+    
+    let source: Source
     let title: String
     let url: String
     let publishedAt: Date
@@ -19,48 +24,64 @@ struct Article {
     let urlToImage: String?
     
     
-    var authorText : String {
+    enum CodingKeys: String, CodingKey {
+        case source
+        case title
+        case url
+        case publishedAt
+        case author
+        case description
+        case urlToImage
+    }
+    
+    var authorText: String {
         author ?? ""
     }
     
-    var descriptionText : String {
+    var descriptionText: String {
         description ?? ""
     }
     
-    var articleURL : URL {
+    var captionText: String {
+        "\(source.name) ‧ \(relativeDateFormatter.localizedString(for: publishedAt, relativeTo: Date()))"
+    }
+    
+    var articleURL: URL {
         URL(string: url)!
     }
     
-    var imageURL : URL? {
+    var imageURL: URL? {
         guard let urlToImage = urlToImage else {
             return nil
         }
         return URL(string: urlToImage)
     }
+    
 }
 
-extension Article : Codable{}
-extension Article : Identifiable{
-    var id: String{url}
-}
-extension Article : Equatable{}
+extension Article: Codable {}
+extension Article: Equatable {}
+extension Article: Identifiable {}
 
 extension Article {
+    
     static var previewData: [Article] {
-        let previewDataUrl = Bundle.main.url(forResource: "news", withExtension: "json")!
-        let data = try! Data(contentsOf: previewDataUrl)
-
+        let previewDataURL = Bundle.main.url(forResource: "news", withExtension: "json")!
+        let data = try! Data(contentsOf: previewDataURL)
+        
         let jsonDecoder = JSONDecoder()
         jsonDecoder.dateDecodingStrategy = .iso8601
-
+        
         let apiResponse = try! jsonDecoder.decode(NewsAPIResponse.self, from: data)
-
         return apiResponse.articles ?? []
     }
+    
 }
+
+
 struct Source {
     let name: String
 }
 
-extension Source : Codable{}
-extension Source : Equatable{}
+extension Source: Codable {}
+extension Source: Equatable {}

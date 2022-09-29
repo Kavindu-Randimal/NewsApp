@@ -14,13 +14,10 @@ struct NewsTabView: View {
         NavigationView{
             NewsListView(articles: articles)
                 .overlay(overlayView)
-                .refreshable {
-                    loadTask()
-                }
-                .onAppear {
-                     loadTask()
-                }
-                .navigationTitle(articleNewsVm.selectedCategory.text)
+                .task(id: articleNewsVm.fetchTaskToken, loadTask)
+                .refreshable(action: refreshTask)
+                .navigationTitle(articleNewsVm.fetchTaskToken.category.text)
+                .navigationBarItems(trailing: menu)
         }
     }
     
@@ -29,12 +26,10 @@ struct NewsTabView: View {
         
             switch articleNewsVm.phase {
             case .empty :  ProgressView()
-            case .success(let articles) where articles.isEmpty: EmptyPlaceHolderView (text: "No article", image: nil)
+            case .success(let articles) where articles.isEmpty: EmptyPlaceHolderView (text: "No articles", image: nil)
             case .failure(let error):
-                RetryView (text: error.localizedDescription){
-                loadTask()
-            }
-            default : EmptyView()
+                RetryView(text: error.localizedDescription, retryAction: refreshTask)
+            default: EmptyView()
             }
         
     }
@@ -48,11 +43,29 @@ struct NewsTabView: View {
         }
     }
     
-    private func loadTask(){
-        async {
-            await articleNewsVm.loadArticles()
+    private func loadTask() async {
+        await articleNewsVm.loadArticles()
+    }
+    
+    private func refreshTask() {
+        DispatchQueue.main.async {
+            articleNewsVm.fetchTaskToken = FetchTaskToken(category: articleNewsVm.fetchTaskToken.category, token: Date())
         }
     }
+    
+    private var menu: some View {
+        Menu {
+            Picker("Category", selection: $articleNewsVm.fetchTaskToken.category) {
+                ForEach(Category.allCases) {
+                    Text($0.text).tag($0)
+                }
+            }
+        } label: {
+            Image(systemName: "fiberchannel")
+                .imageScale(.large)
+        }
+    }
+    
 }
 
 
