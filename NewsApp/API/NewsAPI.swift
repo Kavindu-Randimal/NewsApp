@@ -31,6 +31,10 @@ struct NewsAPI {
         try await fetchArticles(from: generateSearchURL(from: query))
     }
     
+    func fetchBreakingNews(from category: Category) async throws -> [Article] {
+        try await fetchArticles(from: generateBreakingNewsURL(from: category))
+    }
+    
     private func fetchArticles(from url: URL) async throws -> [Article] {
         let (data, response) = try await session.data(from: url)
         
@@ -72,6 +76,11 @@ struct NewsAPI {
         url += "apiKey=\(apiKey)"
         url += "&language=en"
         url += "&q=\(percentEncodedString)"
+        return URL(string: url)!
+    }
+    
+    private func generateBreakingNewsURL(from category: Category) -> URL{
+        var url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=168d33100c5448bdbe4a6de7833b45ab"
         return URL(string: url)!
     }
     

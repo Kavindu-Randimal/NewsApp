@@ -69,10 +69,6 @@ struct NewsTabView: View {
     
 }
 
-
-
-
-
 struct NewsTabView_Previews: PreviewProvider {
     static var previews: some View {
         NewsTabView(articleNewsVm: NewsViewModel(articles: Article.previewData))
