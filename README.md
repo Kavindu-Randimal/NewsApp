@@ -9,3 +9,6 @@ user can search the news which the want to read.
 Click the news card users can see the full description of the news.
 The video and the frontend and the backend is icluded this repository. 
 Fornt end and the backend cant connect at the given time. sorry for that. because of the registration and the login is not working. in the video only the UI's are showing.
+
+
+Video link - https://drive.google.com/drive/folders/19L6B5zDhngVx_YAN5bi8gchqpRxkT3lT?usp=sharing
