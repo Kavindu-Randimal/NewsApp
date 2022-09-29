@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+//    init() {
+//    UITabBar.appearance().backgroundColor = UIColor.red
+//    }
     var body: some View {
+        
         TabView {
             NewsTabView()
                 .tabItem {
                     Label("News", systemImage: "newspaper")
-                } 
+                }
+            BreakingNewsView()
+                .tabItem {
+                    Label("Breaking News", systemImage: "lasso.and.sparkles")
+                }
             SearchTabView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
         }
+        .accentColor(Color.red)
+        
     }
 }
 

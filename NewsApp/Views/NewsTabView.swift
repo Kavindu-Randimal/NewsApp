@@ -61,8 +61,9 @@ struct NewsTabView: View {
                 }
             }
         } label: {
-            Image(systemName: "fiberchannel")
+            Image(systemName: "line.horizontal.3.decrease.circle.fill")
                 .imageScale(.large)
+                .foregroundColor(Color.red)
         }
     }
     
